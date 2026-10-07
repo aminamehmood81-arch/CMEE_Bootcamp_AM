@@ -1,3 +1,23 @@
-*~
-*.tmp
-sandbox/
+# automated files
+*~    
+# all temporary files            
+*.tmp    
+# junk folder         
+sandbox/  
+# python generation and bytecode        
+__pycache__/      
+*.py[cod]
+*.so
+# virtual environments created by python 3
+venv/             
+.venv/
+# linux and bash scripts outputs
+*.log                              
+*.out
+*.dat
+*.gz
+*.tar.gz
+# contains sensitive information 
+.env             
+
+
