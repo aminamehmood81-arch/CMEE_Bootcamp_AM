@@ -1,2 +1,25 @@
 #1
-wc -l ../data/fasta/*.fasta
+wc -l ../data/fasta/*.fasta 
+
+# wc -l counts only lines that are properly delimited. The last line of two numbered files' has no \n after it, so wc -l doesn't count it
+
+#2
+tail -n +2 ../data/fasta/e_coli.fasta 
+
+# +2 means that start from second line and we are skipping header as it is just there for identification not the part of sequence
+
+#3
+tail -n +2 ../data/fasta/e_coli.fasta | tr -d '\n' | wc -c
+
+# tail command will remove the header, tr command will delete the newline characters, and wc will count the sequence symbols
+# So, the answer will contain sequence symbols, including the ambiguous ones.
+
+#4
+tail -n +2 ../data/fasta/e_coli.fasta | tr -d '\n' | grep -o ATGC| wc -l
+
+# grep -o prints each occurrence of ATGC on its output line, and wc -l counts those lines occurrences.
+
+#5
+awk 'NR>1 { at += gsub(/[AT]/, ""); gc += gsub(/[GC]/, "") } END { print at / gc }' ../data/fasta/e_coli.fasta
+
+## awk reads the sequence rows and computes (A+T)/(G+C). NR>1 skips the header saving us from writing tail command.
