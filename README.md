@@ -4,6 +4,7 @@
 ## Project Structure: The project root contains README.md, .gitignore and four directories: 
 ## code/: the assessed files 'unixPrac1.txt', 'tabtocsv.sh' and 'csvtospace.sh'. 
 ## data/: the supplied input files, holds .fasta files, .csv files and tab example.tsv.
+## results and sandbox: These are only the part of local working directories, and are not part of the assessed submission.
 
 ## Language Used: BASH language on Unix system. For commands use ../data/fasta/..., so they must be run from code/.
 ## How to run: To run fasta files simply follow the right directory. To run tabtocsv.sh, run this command in bash terminal 'bash tabtocsv.sh ../data/tab-example.tsv'. To run csvtospace.sh for any desired temperature file, run this command in bash terminal 'bash csvtospace.sh ../data/temperatures/filename.csv'
