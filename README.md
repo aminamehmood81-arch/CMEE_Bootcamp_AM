@@ -1,13 +1,14 @@
-# My First Git practice Repository! Yayyy!
-Here we go:
-So for the first fasta assignment I am going to check the format of the all the files to understand what kind of command each require. And, yes of course I am going to search about the format myself and ask AI as well. 
-## Question no. 1
-Count file lines: I used unix and linux stackexchange for reason and for code I used MQB notes.
-## Question no. 2
-Display the E. coli sequence lines:
-## Question no. 3
-Count sequence length:
-## Question no. 4
-Count a literal motif:
-## Question no. 5 
-Calculate the AT/GC ratio:
+# First Bootcamp Assignment
+## Purpose: It contains five FASTA questions, an improved tabtocsv.sh and a new csvtospace.sh. 
+
+# Project Structure: The project root contains README.md, .gitignore and four directories: 
+## code/: the assessed files 'unixPrac1.txt', 'tabtocsv.sh' and 'csvtospace.sh'. 
+## data/: the supplied input files, holds .fasta files, .csv files and tab example.tsv.
+
+# Language Used: BASH language on Unix system. For commands use ../data/fasta/..., so they must be run from code/.
+
+# Extra utilities: tr ( from Shell scripting chapter), grep -o, awk (from unix linux stackexchange page). AI record: Claude,free model; used for explanations, error interpretation and hints.
+
+# Usage rule: commands use ../data/fasta/..., so they must be run from code/.
+
+# Data: The data files were copied unchanged from the MQB book repository (MulQuaBio/MQB, folder content/data/fasta).
