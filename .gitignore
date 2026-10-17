@@ -3,7 +3,9 @@
 # all temporary files            
 *.tmp    
 # junk folder         
-sandbox/  
+sandbox/ 
+# To ignore generated outputs 
+results/
 # python generation and bytecode        
 __pycache__/      
 *.py[cod]
