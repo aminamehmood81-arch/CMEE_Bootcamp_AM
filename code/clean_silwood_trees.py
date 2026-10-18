@@ -42,7 +42,8 @@ def validate_record(
     source_row: int,
     accepted_ids: set[str],
 ) -> tuple[dict[str, str] | None, list[str]]:
-    
+    """Clean one record, or return the reasons it cannot be used."""
+
     # checks for one survey
     errors = []
 
@@ -55,7 +56,7 @@ def validate_record(
     # 2. Checks for the record_id 
     if not record_id:
         errors.append("missing record_id")
-    elif len(record_id) == 5 and record_id.startswith("ST") and record_id[2:].isdigit():
+    elif len(record_id) == 5 and record_id.startswith("ST") and record_id[2:].isdigit() and record_id.isascii(): #because isdigit() also accepts non-ASCII digits
         if record_id in accepted_ids:
             errors.append("duplicate record_id")
     else:
@@ -68,7 +69,7 @@ def validate_record(
         "manor house": "Manor House",
         "reactor wood": "Reactor Wood",
     }
-    location_key = location.lower()
+    location_key = location.lower() # for case insensitivity
     
     if not location:
         errors.append("missing location")
@@ -78,7 +79,7 @@ def validate_record(
         errors.append("invalid location")
 
     # 4. Validation for genus
-    genus_pass = None
+    genus_pass = None # required to pass only the recognised values for permitted pairing 
     genus_dict = {
         "quercus": "Quercus",
         "acer": "Acer",
@@ -86,7 +87,7 @@ def validate_record(
         "fagus": "Fagus",
         "fraxinus": "Fraxinus",
     }
-    genus_key = genus.lower()
+    genus_key = genus.lower() # for case insensitivity
     
     if not genus:  
         errors.append("missing genus")
@@ -97,7 +98,7 @@ def validate_record(
         errors.append("invalid genus") 
 
     # 5. Validation for species
-    species_pass = None
+    species_pass = None # required to pass only the recognised values for permitted pairing
     species_dict = {
         "robur": "robur",
         "petraea": "petraea",
@@ -129,8 +130,8 @@ def validate_record(
         if (genus_pass, species_pass) not in permitted_pairs:
             errors.append("invalid genus/species combination")
 
-    # 7. numerical checks
-    distance_m = (row.get("distance_m")) or ""
+    # 7. numerical checks with order of -> missing values, then unconvertible, then non-finite, then range 
+    distance_m = (row.get("distance_m") or "").strip() # to prevent false invalid report
     
     if not distance_m:
         errors.append("missing distance_m")
@@ -145,7 +146,7 @@ def validate_record(
             elif not 0 < distance_m <= 100:
                 errors.append("distance_m out of range")
 
-    angle_degrees = (row.get("angle_degrees")) or ""
+    angle_degrees = (row.get("angle_degrees") or "").strip() #to prevent false invalid report
     if not angle_degrees:
         errors.append("missing angle_degrees")
     else:
@@ -165,21 +166,49 @@ def validate_record(
         "location": location,
         "genus": genus,
         "species": species,
-        "distance_m": str(distance_m),
+        "distance_m": str(distance_m), # to covert them back to str
         "angle_degrees": str(angle_degrees)}, []
 
 
 def process_records(
     rows: Iterable[dict[str, str]],
 ) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
-    """Sort records into accepted rows and issue reports."""
-    raise NotImplementedError("Write the loop that processes all records")
+    """Clean records into accepted rows and issue reports."""
+    accepted = []
+    issues = []
+    accepted_ids = set()
 
+    for source_row, row in enumerate(rows, start=2): # because line 1 is header
+        record, reasons = validate_record(row, source_row, accepted_ids)
+        if record is None:
+            issues.append({
+                "source_row": source_row,
+                "record_id": (row.get("record_id") or "").strip(),
+                "reasons": "; ".join(reasons),
+
+            })
+        else:
+            accepted.append(record)
+            accepted_ids.add(record["record_id"])
+
+    return sorted(accepted, key=lambda r: r["record_id"]), issues
+            
 
 def summarise_oaks(clean_records: Iterable[dict[str, str]]) -> list[dict[str, str]]:
     """Count accepted oak records by species."""
-    raise NotImplementedError("Count the accepted oak records")
+    # counting all the accepted records
+    counts = {}
 
+    for record in clean_records:
+        if record["genus"] != "Quercus":
+            continue
+        species = record["species"]
+        counts[species] = counts.get(species, 0) +1
+
+    return [
+        {"species": species,"count": str(counts[species])}
+        for species in sorted(counts) 
+    ]
 
 def write_csv(
     path: Path,
