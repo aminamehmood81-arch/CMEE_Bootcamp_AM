@@ -195,7 +195,8 @@ Rscript code/pound_hill_analysis.R
 7. Figure: MeanRichness by Cultivation, one point per plot; save PDF
 8. Interpretation: comment lines at the end of the script
 ```
-
+ Group work
+I discussed the analysis plan with my assigned group (Booming bonobos)the order of steps: inspect the data and metadata, convert blanks to zeros, reshape to long form, build the quadrat-level richness table, average quadrats within each plot, and then draw the figure from the plot-level results.
 
 ## AI use
 **Tool:** Claude (Anthropic), used as a tutor, 19–23 October 2026.
