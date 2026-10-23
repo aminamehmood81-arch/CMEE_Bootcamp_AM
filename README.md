@@ -195,7 +195,7 @@ Rscript code/pound_hill_analysis.R
 7. Figure: MeanRichness by Cultivation, one point per plot; save PDF
 8. Interpretation: comment lines at the end of the script
 ```
- Group work
+ Group work:
 I discussed the analysis plan with my assigned group (Booming bonobos)the order of steps: inspect the data and metadata, convert blanks to zeros, reshape to long form, build the quadrat-level richness table, average quadrats within each plot, and then draw the figure from the plot-level results.
 
 ## AI use
@@ -208,5 +208,6 @@ I discussed the analysis plan with my assigned group (Booming bonobos)the order 
 - Code review: Claude pointed out bugs in my `TreeHeight.R` and `get_TreeHeight.R` drafts (wrong use of `&&`, an inverted range check). I made the fixes.
 - Test script: Claude gave me the structure and reviewed my drafts.
 - Documentation: help structuring and wording this README.
+GitHub Copilot:** Copilot suggested code in `code/TreeHeight.R`, `code/get_TreeHeight.R` and `code/run_get_TreeHeight.sh`
 
-**What I wrote myself:** the R scripts, the Pound Hill figure and the interpretation. 
+**What I wrote myself:** `code/pound_hill_analysis.R`, including the data decisions, the figure and the interpretation, was designed and written by me, after discussing the step order with my group, and the algorithm of R scripts.
