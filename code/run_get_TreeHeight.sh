@@ -1,8 +1,14 @@
 #!/bin/bash
+# Author: Amina Mehmood <amina.mehmood26@imperial.ac.uk>
+# Script: run_get_TreeHeight.sh
+# Desc: Tests get_TreeHeight.R on supplied and sandbox data
+# Arguments: None
+# Date: Oct 2026
 
 # Creating sandbox
 mkdir -p sandbox
 printf 'Species,Distance.m,Angle.degrees\noak,8,45\nconifer,10,30\n' > sandbox/test_trees.csv
+rm -f results/trees_treeheights.csv results/test_trees_treeheights.csv
 
 # 1. Run on data/trees.csv; stop if it fails
 Rscript code/get_TreeHeight.R data/trees.csv > /dev/null || { echo "FAIL: Step 1 failed to run"; exit 1; }
@@ -34,7 +40,7 @@ awk -F, 'NR==2 { d = $4 - 8; if (d < 0) d = -d; exit !(d < 1e-6) }' results/test
 
 # 6. Run the sandbox case again; check the row count is unchanged
 
-Rscript code/get_TreeHeight.R sandbox/test_trees.csv > /dev/null
+Rscript code/get_TreeHeight.R sandbox/test_trees.csv > /dev/null || { echo "FAIL: Step 6 failed to run"; exit 1; }
 sandbox_rows_after=$(( $(wc -l < results/test_trees_treeheights.csv) - 1 ))
 if [ "$sandbox_rows_after" -ne 2 ]; then
     echo "FAIL: File appended instead of overwritten"; exit 1;
