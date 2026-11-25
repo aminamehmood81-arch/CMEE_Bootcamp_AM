@@ -9,7 +9,6 @@ from pathlib import Path
 from typing import Iterable
 
 
-
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 INPUT_PATH = PROJECT_ROOT / "data" / "silwood_trees_raw.csv"
 RESULTS_DIR = PROJECT_ROOT / "results"
@@ -44,7 +43,7 @@ def validate_record(
 ) -> tuple[dict[str, str] | None, list[str]]:
     """Clean one record, or return the reasons it cannot be used."""
 
-    # checks for one survey
+    # reasons this row will be rejected
     errors = []
 
     # 1. removing whitespaces
@@ -53,10 +52,11 @@ def validate_record(
     genus = (row.get("genus") or "").strip()
     species = (row.get("species") or "").strip()
 
-    # 2. Checks for the record_id 
+    # 2. Checks for the record_id
     if not record_id:
         errors.append("missing record_id")
-    elif len(record_id) == 5 and record_id.startswith("ST") and record_id[2:].isdigit() and record_id.isascii(): #because isdigit() also accepts non-ASCII digits
+    elif (len(record_id) == 5 and record_id.startswith("ST")
+          and record_id[2:].isdigit() and record_id.isascii()):  # isdigit() alone accepts non-ASCII digits
         if record_id in accepted_ids:
             errors.append("duplicate record_id")
     else:
@@ -131,7 +131,7 @@ def validate_record(
             errors.append("invalid genus/species combination")
 
     # 7. numerical checks with order of -> missing values, then unconvertible, then non-finite, then range 
-    distance_m = (row.get("distance_m") or "").strip() # to prevent false invalid report
+    distance_m = (row.get("distance_m") or "").strip()  # blank or missing cell -> "missing", not "invalid"
     
     if not distance_m:
         errors.append("missing distance_m")
@@ -146,7 +146,7 @@ def validate_record(
             elif not 0 < distance_m <= 100:
                 errors.append("distance_m out of range")
 
-    angle_degrees = (row.get("angle_degrees") or "").strip() #to prevent false invalid report
+    angle_degrees = (row.get("angle_degrees") or "").strip()  # blank or missing cell -> "missing", not "invalid"
     if not angle_degrees:
         errors.append("missing angle_degrees")
     else:
@@ -166,7 +166,7 @@ def validate_record(
         "location": location,
         "genus": genus,
         "species": species,
-        "distance_m": str(distance_m), # to covert them back to str
+        "distance_m": str(distance_m), # to convert them back to str
         "angle_degrees": str(angle_degrees)}, []
 
 
@@ -185,7 +185,6 @@ def process_records(
                 "source_row": source_row,
                 "record_id": (row.get("record_id") or "").strip(),
                 "reasons": "; ".join(reasons),
-
             })
         else:
             accepted.append(record)
@@ -196,18 +195,17 @@ def process_records(
 
 def summarise_oaks(clean_records: Iterable[dict[str, str]]) -> list[dict[str, str]]:
     """Count accepted oak records by species."""
-    # counting all the accepted records
     counts = {}
 
     for record in clean_records:
         if record["genus"] != "Quercus":
             continue
         species = record["species"]
-        counts[species] = counts.get(species, 0) +1
+        counts[species] = counts.get(species, 0) + 1
 
     return [
-        {"species": species,"count": str(counts[species])}
-        for species in sorted(counts) 
+        {"species": species, "count": str(counts[species])}
+        for species in sorted(counts)
     ]
 
 def write_csv(
