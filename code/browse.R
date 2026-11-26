@@ -15,4 +15,7 @@ Exponential <- function(N0 = 1, r = 1, generations = 10) {
   return(N)
 }
 
+dir.create("results", showWarnings = FALSE)
+pdf("results/exponential_growth.pdf")    # send the plot to a file in results/
 plot(Exponential(), type = "l", main = "Exponential growth")
+dev.off()                                # finish and save the file
