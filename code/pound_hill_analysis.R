@@ -1,5 +1,11 @@
-# Run from the coursework project root with:
-# Rscript code/pound_hill_analysis.R
+# Author: Amina Mehmood <amina.mehmood26@imperial.ac.uk>
+# Script: pound_hill_analysis.R
+# Desc: Species richness per plot by cultivation month (Pound Hill): wrangle, check, summarise and plot
+# Arguments: None
+# Date: Oct 2026
+# Inputs: data/pound_hill_data.csv, data/pound_hill_meta_data.csv
+# Outputs: results/pound_hill_long.csv, results/pound_hill_plot_richness.csv,
+#          results/pound_hill_plot_richness.pdf
 
 # Load the data ----------------------------------------------------------
 library(reshape2)
@@ -23,7 +29,7 @@ MyData <- t(MyData)
 head(MyData)
 dim(MyData)
 
-# For this dataset, we have been told that blanks are observed absences.
+# For this dataset, blanks are observed absences as per the meta data.
 # That knowledge is what allows us to record them as zero rather than NA.
 MyData[MyData == ""] <- 0
 
@@ -96,7 +102,9 @@ geom_jitter(width = 0.1, height = 0, colour = "darkgreen", size = 3) +
  theme_minimal()
 ggsave(plot = richness_plot, width = 6, height = 6, filename = "results/pound_hill_plot_richness.pdf")
 
-#Interpretation
-# May has the heighest mean richness.
-# Variation among months is small, but variation among plots within each month is large, so plot-level differences matter as well.
-# The figure alone cannot show causation, as differences in soil and location were not considered.
+# Interpretation
+# Each point is the average species richness of all quadrats within one plot (4 plots per month).
+# May has the highest mean richness (9.65), compared with March (7.81) and October (7.61).
+# The gap between months (about 1 to 2 points) is  less than the spread among plots within a month (about 3-4 points), and the months overlap.
+# With only 4 plots per month and no statistical analysis, these differences are descriptive, not evidence of a treatment  effect.
+# Also, some of the variation within months may reflect differences between blocks (location)
