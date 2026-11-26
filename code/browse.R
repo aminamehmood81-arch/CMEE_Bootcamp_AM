@@ -3,7 +3,9 @@
 # Desc: Debugging with browser(): pause inside a loop to inspect variables
 # Arguments: None
 # Date: Oct 2026
-# Interactive: run inside R with source("code/browse.R"), not with Rscript.
+# Run from the project root: Rscript code/browse.R < /dev/null
+#   (< /dev/null lets it finish without stopping at browser(); output: results/exponential_growth.pdf)
+# To step through it interactively: source("code/browse.R") inside R, then type n (next) or c (continue).
 
 Exponential <- function(N0 = 1, r = 1, generations = 10) {
   N <- rep(NA, generations)   # empty vector for population sizes
