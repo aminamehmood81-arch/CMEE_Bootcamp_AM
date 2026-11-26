@@ -1,3 +1,11 @@
+# Author: Amina Mehmood <amina.mehmood26@imperial.ac.uk>
+# Script: get_TreeHeight.R
+# Desc: Calculate tree heights from distance and angle for any CSV given on the command line
+# Arguments: one CSV file path with columns Species, Distance.m, Angle.degrees
+# Date: Oct 2026
+# Run from the project root: Rscript code/get_TreeHeight.R data/trees.csv
+# Output: results/<input name>_treeheights.csv
+
 # 1. Read only input path from the command line
 args <- commandArgs(trailingOnly = TRUE)
 # if no arguments: stop with a clear message
@@ -24,7 +32,7 @@ required <- c("Species", "Distance.m", "Angle.degrees")
 if (!all(required %in% names(df))) {
   stop("Columns missing from the input file.")
 }
-# 3. Check Distance.m and Angle.degrees are numeric and 
+# 3. Check Distance.m and Angle.degrees are numeric and finite
 if (!all(is.numeric(df$Distance.m) & is.numeric(df$Angle.degrees)))
 {
   stop("The required column has non-numeric values")
