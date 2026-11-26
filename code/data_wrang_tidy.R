@@ -1,6 +1,11 @@
-# Wrangle the Pound Hill dataset with dplyr and tidyr (tidyverse version of data_wrang.R).
-# Run from the coursework project root with:
-# Rscript code/data_wrang_tidy.R
+# Author: Amina Mehmood <amina.mehmood26@imperial.ac.uk>
+# Script: data_wrang_tidy.R
+# Desc: Wrangles the Pound Hill data from wide to long with tidyr::pivot_longer (tidyverse version of data_wrang.R)
+# Arguments: None
+# Date: Nov 2026
+# Run from the project root: Rscript code/data_wrang_tidy.R
+# Inputs: data/pound_hill_data.csv, data/pound_hill_meta_data.csv
+# Output: results/data_wrang_tidy_long.csv
 
 # Load the data ----------------------------------------------------------
 # The first rows describe the sampling design, so do not use one as a header yet.
