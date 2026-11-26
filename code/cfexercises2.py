@@ -1,5 +1,6 @@
 
-########################
+"""Loops and conditionals practice: predict how many times each function prints 'hello'."""
+
 def hello_1(x):
     for j in range(x):
         if j % 3 == 0:
@@ -8,7 +9,6 @@ def hello_1(x):
 
 hello_1(12)
 
-########################
 def hello_2(x):
     for j in range(x):
         if j % 5 == 3:
@@ -19,7 +19,6 @@ def hello_2(x):
 
 hello_2(12)
 
-########################
 def hello_3(x, y):
     for i in range(x, y):
         print('hello')
@@ -27,7 +26,6 @@ def hello_3(x, y):
 
 hello_3(3, 17)
 
-########################
 def hello_4(x):
     while x != 15:
         print('hello')
@@ -36,7 +34,6 @@ def hello_4(x):
 
 hello_4(0)
 
-########################
 def hello_5(x):
     while x < 100:
         if x == 31:
@@ -58,4 +55,4 @@ def hello_6(x, y):
             break
     print(' ')
 
-hello_6 (True, 0)
+hello_6(True, 0) 
