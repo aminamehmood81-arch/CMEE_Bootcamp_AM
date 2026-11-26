@@ -22,4 +22,9 @@ venv/
 # contains sensitive information 
 .env             
 
+# R session and plotting leftovers
+.RData
+.Rhistory
+Rplots.pdf
+.Rproj.user/
 
