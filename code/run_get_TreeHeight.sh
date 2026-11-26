@@ -51,5 +51,14 @@ if Rscript code/get_TreeHeight.R > /dev/null 2>&1; then
     echo "FAIL: Script should have failed with no arguments"; exit 1; 
 fi
 
+# 8. Run on an invalid file (non-finite angle); it must FAIL and write no output
+printf 'Species,Distance.m,Angle.degrees\noak,8,Inf\n' > sandbox/bad_trees.csv
+rm -f results/bad_trees_treeheights.csv
+if Rscript code/get_TreeHeight.R sandbox/bad_trees.csv > /dev/null 2>&1; then
+    echo "FAIL: Script should have failed on non-finite input"; exit 1;
+fi
+if [ -f results/bad_trees_treeheights.csv ]; then
+    echo "FAIL: An output file was written for invalid input"; exit 1;
+fi
 
 echo "All checks passed!"
