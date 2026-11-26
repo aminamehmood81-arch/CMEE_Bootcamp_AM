@@ -1,6 +1,12 @@
-# Wrangle the Pound Hill dataset.
-# Run from the coursework project root with:
-# Rscript code/data_wrang.R
+# Author: Amina Mehmood <amina.mehmood26@imperial.ac.uk>
+# Script: data_wrang.R
+# Desc: Supplied MQB starter: wrangles the Pound Hill data from wide to long with reshape2.
+#       Only the output filename was changed (so it does not overwrite pound_hill_analysis.R output).
+# Arguments: None
+# Date: Nov 2026
+# Run from the project root: Rscript code/data_wrang.R
+# Inputs: data/pound_hill_data.csv, data/pound_hill_meta_data.csv
+# Output: results/data_wrang_long.csv
 
 # Load the data ----------------------------------------------------------
 # The first rows describe the sampling design, so do not use one as a header yet.
