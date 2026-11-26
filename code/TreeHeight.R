@@ -1,7 +1,16 @@
+# Author: Amina Mehmood <amina.mehmood26@imperial.ac.uk>
+# Script: TreeHeight.R
+# Desc: Calculates tree heights from distance and angle for data/trees.csv
+# Arguments: None
+# Date: Oct 2026
+# Run from the project root: Rscript code/TreeHeight.R
+# Input: data/trees.csv (Species, Distance.m, Angle.degrees)
+# Output: results/TreeHts.csv (input columns plus height_m)
+
 # 1. Read data/trees.csv
 df<- read.csv("data/trees.csv")
 
-# 2. Inspect: dimensions, column nsmes, header, rows
+# 2. Inspect: dimensions, column names, header, rows
 dim(df)
 names(df)
 str(df)
@@ -10,7 +19,7 @@ required <- c("Species", "Distance.m", "Angle.degrees")
 if (!all(required %in% names(df))) {
   stop("Columns missing from the input file.")
 }
-# 3. Check Distance.m and Angle.degrees are numeric and 
+# 3. Check Distance.m and Angle.degrees are numeric and finite
 if (!all(is.numeric(df$Distance.m) & is.numeric(df$Angle.degrees)))
 {
   stop("The required column has non-numeric values")
@@ -47,7 +56,7 @@ df$height_m <- TreeHeight(df$Angle.degrees, df$Distance.m)
 dir.create("results", showWarnings = FALSE)
 write.csv(df, "results/TreeHts.csv", row.names = FALSE)
 
-# 8. Check for the output header order of data rows
+# 8. Check for the column order and number of data rows
 df_check <- read.csv("results/TreeHts.csv")
 str(df_check)
 head(df_check)
