@@ -19,5 +19,11 @@ printf 'New value: <%s>\n' "$my_value"
 printf 'Enter two integers separated by spaces: '
 read -r first_number second_number
 printf 'You entered %s and %s\n' "$first_number" "$second_number"
+
+# Both inputs must be whole numbers, or expr fails
+if [[ ! "$first_number" =~ ^-?[0-9]+$ || ! "$second_number" =~ ^-?[0-9]+$ ]]; then
+    printf 'Error: please enter two whole numbers\n' >&2
+    exit 1
+fi
 my_sum=$(expr "$first_number" + "$second_number")
 printf 'Their sum is: %s\n' "$my_sum"
