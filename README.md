@@ -21,11 +21,11 @@ Shell and R scripts start with a comment header. Python files start with a docst
 
 | Software | Version | Needed for |
 |---|---|---|
-| Bash | FILL | `.sh` scripts |
-| Python 3 | FILL (standard library only) | `.py` scripts |
-| R | FILL | `.R` scripts |
+| Bash | 5.3.9 | `.sh` scripts |
+| Python 3 | 3.14.4 (standard library only) | `.py` scripts |
+| R | 4.5.2 | `.R` scripts |
 | R packages | `reshape2` 1.4.5, `dplyr` 1.2.1, `tidyr` 1.3.2, `ggplot2` 4.0.3 | Pound Hill and data wrangling scripts |
-| ImageMagick (`convert`) | FILL | `tiff2_png.sh` only |
+| ImageMagick (`convert`) | 7.1.2 | `tiff2_png.sh` only |
 
 Tested on Ubuntu Linux. Missing R packages:
 `Rscript -e 'install.packages(c("reshape2","dplyr","tidyr","ggplot2"))'`
@@ -271,6 +271,9 @@ cd sandbox/images && bash ../../code/tiff2_png.sh; ls; cd ../..
 - `cfexercises1.py`: fixed a `RecursionError` at 0 (base case `x <= 1`).
 - Added input checks to four shell scripts, and headers or docstrings where missing.
 
+**Fresh-clone check (27 November 2026)**
+- Followed only this README on a fresh clone. It found one unexplained warning in `basic_io.R`; fixed by appending without repeating the header (`col.names = FALSE`).
+
 ## 9. Harmless messages
 
 - R may print `incomplete final line found`: some supplied CSVs have no final newline. The data is read correctly; the files are left unchanged on purpose.
@@ -282,7 +285,7 @@ cd sandbox/images && bash ../../code/tiff2_png.sh; ls; cd ../..
 - Assignment 1 (October 2026): explanations, error meanings, hints.
 - Assignment 2 (13–18 October 2026): Python concepts and errors; review of my pseudocode and drafts (Claude listed bugs, I fixed them); how `assert` and a test helper work (I wrote the expected values); Git help.
 - Assignment 3 (19–23 October 2026): review of my pseudocode and drafts; concepts (nested design, `commandArgs`, `&` vs `&&`); error meanings; structure for the test script.
-- Revision for Assignment 4 (21–27 November 2026): explanations, error meanings, review for the observations exercise and practice scripts, suggested input checks, organising my notes into this README, and a helped running a final test run of the README commands on a fresh clone.
+- Revision for Assignment 4 (21–27 November 2026): explanations, error meanings, review for the observations exercise and practice scripts, suggested input checks, organising my notes into this README, and a final test run of the README commands on a fresh clone.
 
 **GitHub Copilot** only suggested code in `code/TreeHeight.R`, `code/get_TreeHeight.R` and `code/run_get_TreeHeight.sh`.
 
