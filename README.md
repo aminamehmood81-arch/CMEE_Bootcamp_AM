@@ -24,7 +24,7 @@ Shell and R scripts start with a comment header. Python files start with a docst
 | Bash | FILL | `.sh` scripts |
 | Python 3 | FILL (standard library only) | `.py` scripts |
 | R | FILL | `.R` scripts |
-| R packages `reshape2`, `dplyr`, `tidyr`, `ggplot2` | FILL | Pound Hill and data wrangling scripts |
+| R packages | `reshape2` 1.4.5, `dplyr` 1.2.1, `tidyr` 1.3.2, `ggplot2` 4.0.3 | Pound Hill and data wrangling scripts |
 | ImageMagick (`convert`) | FILL | `tiff2_png.sh` only |
 
 Tested on Ubuntu Linux. Missing R packages:
@@ -71,8 +71,8 @@ python3 code/clean_silwood_trees.py
   - `results/silwood_trees_clean.csv`: valid rows, sorted by `record_id`
   - `results/silwood_tree_issues.csv`: invalid rows as `source_row,record_id,reasons` (`source_row` = line number in the file; the header is line 1)
   - `results/oak_species_counts.csv`: `species,count` for valid `Quercus` rows
-- You should see: 36 rows in total, 24 valid and 12 invalid. Oaks: `petraea` 4, `robur` 4.
-- Running it again gives identical files (same `md5sum`).
+- You should see: 36 rows in total, 24 valid and 12 invalid. Of the 24 valid records, 8 are oaks: `petraea` 4, `robur` 4.
+- Running it again gives identical files.
 
 **test_silwood_trees.py**
 ```bash
@@ -152,7 +152,7 @@ add height_m as the fourth column (other columns unchanged)
 create results/ if missing; write results/TreeHts.csv without row numbers
 check the output header and that it has 120 rows
 ```
-Toy check: 8 × tan(45 × π/180) = 8 (tested in `sandbox/`, see `run_get_TreeHeight.sh`).
+Toy check: a tree 8 m away at 45° must be 8 m tall (tan 45° = 1). Step 5 of `run_get_TreeHeight.sh` checks this.
 
 **get_TreeHeight.R**: the same, for any CSV file you name.
 ```bash
@@ -210,7 +210,7 @@ bash code/ConcatenateTwoFiles.sh sandbox/oak.txt sandbox/pine.txt sandbox/combin
 ```
 - You should see: `oak` then `pine`. Wrong number of arguments: exit 2. Missing input: exit 1.
 
-**tiff2_png.sh**: turns every `.tif` in the current folder into a `.png`. The data has no `.tif` files, so make one first:
+**tiff2_png.sh**: turns every `.tif` in the folder you are in into a `.png`. The data has no `.tif` files, so make one first. This is the only script run from inside another folder: it goes into `sandbox/images`, runs the script from there (`../../code`), then returns to the root.
 ```bash
 mkdir -p sandbox/images
 convert -size 10x10 xc:white sandbox/images/test.tif
@@ -234,51 +234,42 @@ cd sandbox/images && bash ../../code/tiff2_png.sh; ls; cd ../..
 | observations_practice.py | `python3 code/observations_practice.py` | `Site A: known total = 2, missing counts = 1`, `Site B: known total = 0, missing counts = 0` |
 | test_observations_practice.py | `python3 code/test_observations_practice.py` | no error = all checks passed |
 
-`test_observations_practice.py` also checks the boundary file (site C: total `None`, 2 missing; site D: 0) and the invalid file (refused). It shows that the book's `suggested_total` gives 0 instead of `None` for site C; that failing check is kept as a comment.
+`test_observations_practice.py` also checks the boundary file (site C: total `None`, 2 missing; site D: 0) and the invalid file (refused). It shows that the MQB book's `suggested_total` gives 0 instead of `None` for site C; that failing check is kept as a comment.
 
 ### R
 | Script | Command | You should see |
 |---|---|---|
-| boilerplate.R | `Rscript code/boilerplate.R` | `Argument 1 is a numeric` … `Argument riki is a character` … |
+| boilerplate.R | `Rscript code/boilerplate.R` | `Argument 1 is a numeric`, then `Argument riki is a character` |
 | basic_io.R | `Rscript code/basic_io.R` | no output; writes `results/MyData.csv` |
-| control_flow.R | `Rscript code/control_flow.R` | `a is TRUE`, `Less than a half`, `1 squared is 1` … `10 squared is 100`, then 1 to 100 (squares) |
-| break.R | `Rscript code/break.R` | `i equals 0` … `i equals 9` |
+| control_flow.R | `Rscript code/control_flow.R` | `a is TRUE`, `Less than a half`, then the squares of 1 to 10 |
+| break.R | `Rscript code/break.R` | `i equals 0` to `i equals 9` |
 | next.R | `Rscript code/next.R` | 1, 3, 5, 7, 9 |
 | r_conditionals.R | `Rscript code/r_conditionals.R` | `4 is even!`, `4 is a power of 2!`, `3 is a prime!`, `2 is a prime!` |
 | try.R | `Rscript code/try.R` | some means and some `too few unique values!` errors; the script still finishes |
-| browse.R | `Rscript code/browse.R < /dev/null` | `debug:` lines; writes `results/exponential_growth.pdf` |
+| browse.R | `Rscript code/browse.R < /dev/null` | `debug:` lines; writes `results/exponential_growth.pdf` (`< /dev/null` stops it pausing at `browser()`) |
 | observations_practice.R | `Rscript code/observations_practice.R` | sites A, B, C (NA), D; the invalid file is refused; writes `results/known_totals.pdf` |
 | data_wrang.R | `Rscript code/data_wrang.R` | writes `results/data_wrang_long.csv` (2419 × 6) |
 | data_wrang_tidy.R | `Rscript code/data_wrang_tidy.R` | writes `results/data_wrang_tidy_long.csv` (same data as above) |
 
-`browse.R`: `< /dev/null` lets it finish without stopping at `browser()`. To step through it, run `source("code/browse.R")` inside R and type `n` (next) or `c` (continue).
-
 ---
 
-## 8. What I changed after feedback, and how I checked
+## 8. What I changed after feedback
 
 **Assignment 1**
-- `tabtocsv.sh` and `csvtospace.sh` wrote to `../results` and only worked from `code/`. They now write to `results/` and run from the root.
-- `unixPrac1.txt`: `../data` changed to `data/`; all five answers rerun from the root.
-- Tested both converters: empty fields kept, a rerun replaces the file, a filename with a space works, and wrong input gives a clear error.
+- `tabtocsv.sh`, `csvtospace.sh`: now write to `results/` and run from the project root (before: `../results`, only from `code/`).
+- `unixPrac1.txt`: paths changed from `../data` to `data/`; answers rerun from the root.
 
 **Assignment 2**
-- New tests: an invalid oak is not counted; a row with several problems lists every reason; missing, invalid (`abc`, `nan`, `inf`) and boundary values (distance 0 and 100; angle 0, 90 and 89.9); messy text is cleaned and the oak still counted. All pass.
-- Ran the cleaner twice: all three outputs identical (`md5sum`).
+- Added tests: an invalid oak is not counted; a row with several problems lists all reasons; missing, invalid and boundary values for distance and angle; messy text is cleaned.
 
 **Assignment 3**
-- `run_get_TreeHeight.sh`: step 6 had no failure check; added one, and old outputs are now deleted before testing. Proved with a broken copy, which printed `FAIL: Step 6 failed to run`. Added a test that invalid input fails and writes no file.
-- Both tree-height scripts tested with bad input: exit 1 and no file.
-- Pound Hill: interpretation rewritten from the plot-level values; header added.
+- `run_get_TreeHeight.sh`: step 6 now stops with a message if it fails; old outputs are deleted before testing; added a test that invalid input fails and writes no file.
+- `pound_hill_analysis.R`: interpretation rewritten from the plot-level values.
 
 **Practice scripts**
-- Added all missing scripts; renamed `loop.py` to `loops.py`.
-- Wrong input now gives a clear message and a non-zero exit in `CountLines.sh`, `variables.sh`, `ConcatenateTwoFiles.sh` and `tiff2_png.sh`.
-- `cfexercises1.py`: `foo_5(0)` crashed (`RecursionError`); fixed the base case to `x <= 1`. The book says `foo_6` fails at 0, but testing showed it returns 1.
-- `test_control_flow.py`: replaced with the book's import-based version.
-- `debugme.py`: catches `Exception` instead of a bare `except`.
-- R scripts: removed lines that `source()`d the script itself; `browse.R` saves its plot to `results/`.
-- Headers or docstrings added wherever they were missing.
+- Added the missing scripts; renamed `loop.py` to `loops.py`.
+- `cfexercises1.py`: fixed a `RecursionError` at 0 (base case `x <= 1`).
+- Added input checks to four shell scripts, and headers or docstrings where missing.
 
 ## 9. Harmless messages
 
@@ -291,8 +282,8 @@ cd sandbox/images && bash ../../code/tiff2_png.sh; ls; cd ../..
 - Assignment 1 (October 2026): explanations, error meanings, hints.
 - Assignment 2 (13–18 October 2026): Python concepts and errors; review of my pseudocode and drafts (Claude listed bugs, I fixed them); how `assert` and a test helper work (I wrote the expected values); Git help.
 - Assignment 3 (19–23 October 2026): review of my pseudocode and drafts; concepts (nested design, `commandArgs`, `&` vs `&&`); error meanings; structure for the test script.
-- Revision for Assignment 4 (21–26 November 2026): explanations, error meanings, review for the observations exercise and practice scripts, suggested input checks, and organising my notes into this README.
+- Revision for Assignment 4 (21–27 November 2026): explanations, error meanings, review for the observations exercise and practice scripts, suggested input checks, organising my notes into this README, and a helped running a final test run of the README commands on a fresh clone.
 
-**GitHub Copilot** suggested code in `code/TreeHeight.R`, `code/get_TreeHeight.R` and `code/run_get_TreeHeight.sh`.
+**GitHub Copilot** only suggested code in `code/TreeHeight.R`, `code/get_TreeHeight.R` and `code/run_get_TreeHeight.sh`.
 
 **How I checked:** I ran every command in this README from the project root and compared the output with what I expected.
